@@ -1,0 +1,30 @@
+html {
+	font-family: Calibri, sans-serif;
+}
+
+.text {
+	text-align: center;
+}
+
+.images {
+	text-align: center;
+}
+
+.tables {
+	text-align: center;
+}
+
+table {
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+}
+
+th {
+	text-align: center;
+}
+
+.back {
+	text-align: center;
+}
