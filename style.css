@@ -33,19 +33,39 @@ header h2 {
 }
 
 nav {
+	display: inline-block;
+	position: relative;
+	left: calc(50% - 325px);
 	font-family: quicksand;
 	font-size: 14pt;
 	text-align: center;
-	color: white
+	border-radius: 15px;
+	background: #333333;
+}
+
+nav ul {
+	display: inline-block;
+	margin: 5px;
+	margin-bottom: 0px;
+	padding: 0px;
+}
+
+nav li {
+	list-style-type: none;
+	float: left;
 }
 
 nav a {
+	display: block;
+	width: 150px;
 	color: white;
 	text-decoration: none;
+	border-radius: 15px;
+	padding: 5px;
 }
 
 nav a:hover{
-	color: gray;
+	background-color: #555555
 }
 
 section {
@@ -64,6 +84,27 @@ section {
 
 section h1, h2, h3, h4, h5, h6 {
 	text-align: center;
+}
+
+section table {
+	width: 50%;
+	min-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 15px;
+	border-width: 4px;
+	border-style: solid;
+	border-color: black;
+}
+
+section th {
+	border-style: none;
+	width: 150px;
+}
+
+section td {
+	border-style: none;
+	padding: 10px;
 }
 
 figure img {
