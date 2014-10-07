@@ -3,48 +3,100 @@
 <html>
 
 	<head>
-		<title>Joshua Jackson's To-Do List</title>
-		<link rel="stylesheet" href="style.css" type="text/css"/>
-		<link rel="stylesheet" href="todo.css" type="text/css"/>
+	
+		<title>To-Do List Application</title>
+		<link rel="stylesheet" href="style.css" type="text/css" />
+		<style>
+			header {
+				text-align: center;
+			}
+			
+			section {
+				width: 50%;
+				min-width: 800px;
+				margin-top: 25px;
+				margin-bottom: 25px;
+				margin-left: auto;
+				margin-right: auto;
+				border: 4px solid;
+				padding: 10px;
+			}
+			
+			#list ul {
+				list-style: none;
+				margin-left: -20px;
+			}
+			
+			#list input {
+				margin: 5px;
+				margin-right: 10px;
+			}
+			
+			#options {
+				text-align: center;
+			}
+		</style>
+		
 	</head>
 	
 	<body>
-	
+		
+		<script type="text/javascript">
+		
+			function addTask()
+			{
+				// Reserve local variables
+				var newTask, checkBox, list;
+				
+				// Create new checkbox
+				checkBox = document.createElement('input');
+				checkBox.type = "checkbox";
+				checkBox.setAttribute('onclick', 'crossOut(this);');
+				
+				// Create new list element
+				newTask = document.createElement('li');
+				newTask.appendChild(checkBox);
+				newTask.innerHTML += document.getElementById('newtask').value;
+				
+				// Append new item to list
+				document.querySelector('#list ul').appendChild(newTask);
+				
+				// Clear input box
+				document.getElementById('newtask').value = "";
+			}
+			
+			function crossOut(item)
+			{
+				if (item.checked)
+				{
+					item.parentNode.style.textDecoration = "line-through";
+				}
+				else
+				{
+					item.parentNode.style.textDecoration = "none";
+				}
+			}
+			
+		</script>	
+		
 		<header>
-			<h1>Joshua Matthew Jackson</h1>
-			<h2>First-Year at Luther College | Computer Science / Physics Major | Part-Time Galactic Hitchhiker</h3>
-		</header>
-	
-		<nav>
-			<ul>
-				<li><a href="index.html">About</a></li>
-				<li><a href="games.html">Games</a></li>
-				<li><a href="classes.html">Classes</a></li>
-				<li><a href="links.html">Links</a></li>
-			</ul>
-		</nav>
-	
-		<section>
 			<h1>To-Do List</h1>
+		</header>
+		
+		<section id="list">
 			<ul>
-				<li class="medium" >Work on Paideia paper.</li>
-				<li class="high" >Get enough sleep.</li>
-				<li class="high" >Eat lunch.</li>
-				<li class="medium done" >Complete to-do list.</li>
-				<li class="medium" >Work on Trees.</li>
-				<li class="high" >Complete Discrete Structures homework.</li>
-				<li class="medium" >Attend Physics lab.</li>
-				<li class="low" >Read a book.</li>
-				<li class="low" >Play a game.</li>
-				<li class="high done" >Watch Doctor Who.</li>
-				<li class="medium" >Invent a time machine.</li>
 			</ul>
+		</section>
+		
+		<section id="options">
+			<input id="newtask" type="text"><br>
+			<button onclick="addTask();">Add Task</button>
 		</section>
 		
 		<footer>
 			<p>&copy; Copyright 2014, Joshua Jackson.</p>
 		</footer>
-		
+			
 	</body>
 
 </html>
