@@ -22,12 +22,12 @@
 				padding: 10px;
 			}
 			
-			#list ul {
+			.list ul {
 				list-style: none;
 				margin-left: -20px;
 			}
 			
-			#list input {
+			.list input {
 				margin: 5px;
 				margin-right: 10px;
 			}
@@ -43,23 +43,21 @@
 		
 		<script type="text/javascript">
 		
-			function addTask()
+			window.onload = loadTasks;
+			window.onunload = saveTasks;
+		
+			function addTask(description, priority)
 			{
 				// Reserve local variables
-				var newTask, checkBox, list;
-				
-				// Create new checkbox
-				checkBox = document.createElement('input');
-				checkBox.type = "checkbox";
-				checkBox.setAttribute('onclick', 'crossOut(this);');
+				var newTask, checkBox;
 				
 				// Create new list element
 				newTask = document.createElement('li');
-				newTask.appendChild(checkBox);
-				newTask.innerHTML += document.getElementById('newtask').value;
+				//newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + document.getElementById('newtask').value;
+				newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
 				
 				// Append new item to list
-				document.querySelector('#list ul').appendChild(newTask);
+				document.querySelector('#high ul').appendChild(newTask);
 				
 				// Clear input box
 				document.getElementById('newtask').value = "";
@@ -70,10 +68,42 @@
 				if (item.checked)
 				{
 					item.parentNode.style.textDecoration = "line-through";
+					item.parentNode.className = "done";
 				}
 				else
 				{
 					item.parentNode.style.textDecoration = "none";
+					item.parentNode.className = "";
+				}
+			}
+			
+			function saveTasks()
+			{
+				var tasks, data;
+			
+				tasks = document.querySelectorAll('li');
+				data = [];
+				
+				for (i = 0; i < tasks.length; i++)
+				{
+					if (tasks[i].className != "done")
+					{
+						data.push(tasks[i].innerText);
+					}
+				}
+
+				localStorage.setItem("todoDatabase", JSON.stringify(data));
+			}
+			
+			function loadTasks()
+			{
+				var data;
+				
+				data = JSON.parse(localStorage.getItem("todoDatabase"));
+				
+				for (i = 0; i < data.length; i++)
+				{
+					addTask(data[i], 'high');
 				}
 			}
 			
@@ -83,19 +113,39 @@
 			<h1>To-Do List</h1>
 		</header>
 		
-		<section id="list">
+		<section class="list" id="high">
+			<h1>High Priority</h1>
+			<ul>
+			</ul>
+		</section>
+		
+		<section class="list" id="medium">
+			<h1>Medium Priority</h1>
+			<ul>
+			</ul>
+		</section>
+		
+		<section class="list" id="low">
+			<h1>Low Priority</h1>
 			<ul>
 			</ul>
 		</section>
 		
 		<section id="options">
 			<input id="newtask" type="text"><br>
-			<button onclick="addTask();">Add Task</button>
+			<select>
+				<option value="high">High</option>
+				<option value="medium">Medium</option>
+				<option value="low">Low</option>
+			</select>
+			<button onclick="addTask(document.getElementById('newtask').value, 'high');">Add Task</button>
 		</section>
 		
+		<!--
 		<footer>
 			<p>&copy; Copyright 2014, Joshua Jackson.</p>
 		</footer>
+		-->
 			
 	</body>
 
