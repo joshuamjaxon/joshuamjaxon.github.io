@@ -46,29 +46,21 @@
 			window.onload = loadTasks;
 			window.onunload = saveTasks;
 		
-			function addTask(description, priority, due)
+			function addTask(description, priority)
 			{
 				// Reserve local variables
 				var newTask, checkBox;
 				
 				// Create new list element
 				newTask = document.createElement('li');
-				
-				if (due == null || due =="")
-				{
-					newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
-				}
-				else
-				{
-					newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + "[" + due + "] " + description;
-				}
+				//newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + document.getElementById('newtask').value;
+				newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
 				
 				// Append new item to list
-				document.querySelector('#' + priority + ' ul').appendChild(newTask);
+				document.querySelector('#high ul').appendChild(newTask);
 				
 				// Clear input box
 				document.getElementById('newtask').value = "";
-				document.getElementById('duedate').value = "";
 			}
 			
 			function crossOut(item)
@@ -87,24 +79,11 @@
 			
 			function saveTasks()
 			{
-				// Reserve variables
 				var tasks, data;
 			
-				// Assign HIGH
-				data = []
-				tasks = document.querySelectorAll('#high li');
-				for (i = 0; i < tasks.length; i++)
-				{
-					if (tasks[i].className != "done")
-					{
-						data.push(tasks[i].innerText);
-					}
-				}
-				localStorage.setItem("todoDatabaseHigh", JSON.stringify(data));
+				tasks = document.querySelectorAll('li');
+				data = [];
 				
-				// Assign MEDIUM
-				data = []
-				tasks = document.querySelectorAll('#medium li');
 				for (i = 0; i < tasks.length; i++)
 				{
 					if (tasks[i].className != "done")
@@ -112,43 +91,19 @@
 						data.push(tasks[i].innerText);
 					}
 				}
-				localStorage.setItem("todoDatabaseMedium", JSON.stringify(data));
-				
-				// Assign LOW
-				data = []
-				tasks = document.querySelectorAll('#low li');
-				for (i = 0; i < tasks.length; i++)
-				{
-					if (tasks[i].className != "done")
-					{
-						data.push(tasks[i].innerText);
-					}
-				}
-				localStorage.setItem("todoDatabaseLow", JSON.stringify(data));
+
+				localStorage.setItem("todoDatabase", JSON.stringify(data));
 			}
 			
 			function loadTasks()
 			{
-				var HIGH = 0, MEDIUM = 1, LOW = 2;
-				var data = [];
-				var priority;
+				var data;
 				
-				data[HIGH] = JSON.parse(localStorage.getItem("todoDatabaseHigh"));
-				for (i = 0; i < data[HIGH].length; i++)
-				{
-					addTask(data[HIGH][i], "high");
-				}
+				data = JSON.parse(localStorage.getItem("todoDatabase"));
 				
-				data[MEDIUM] = JSON.parse(localStorage.getItem("todoDatabaseMedium"));
-				for (i = 0; i < data[MEDIUM].length; i++)
+				for (i = 0; i < data.length; i++)
 				{
-					addTask(data[MEDIUM][i], "medium");
-				}
-				
-				data[LOW] = JSON.parse(localStorage.getItem("todoDatabaseLow"));
-				for (i = 0; i < data[LOW].length; i++)
-				{
-					addTask(data[LOW][i], "low");
+					addTask(data[i], 'high');
 				}
 			}
 			
@@ -177,15 +132,13 @@
 		</section>
 		
 		<section id="options">
-			Task: <input id="newtask" type="text">
-			Due: <input id="duedate" style="width:100px" type="text">
-			<br>
-			<select id="priority">
+			<input id="newtask" type="text"><br>
+			<select>
 				<option value="high">High</option>
 				<option value="medium">Medium</option>
 				<option value="low">Low</option>
 			</select>
-			<button onclick="addTask(document.getElementById('newtask').value, document.getElementById('priority').value, document.getElementById('duedate').value);">Add Task</button>
+			<button onclick="addTask(document.getElementById('newtask').value, 'high');">Add Task</button>
 		</section>
 		
 		<!--
