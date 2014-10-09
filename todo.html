@@ -32,7 +32,7 @@
 				margin-right: 10px;
 			}
 			
-			#options {
+			.options {
 				text-align: center;
 			}
 		</style>
@@ -46,7 +46,7 @@
 			window.onload = loadTasks;
 			window.onunload = saveTasks;
 		
-			function addTask(description, priority, due)
+			function addTask(description, priority, due, project)
 			{
 				// Reserve local variables
 				var newTask, checkBox;
@@ -64,12 +64,37 @@
 				}
 				
 				// Append new item to list
-				document.querySelector('#' + priority + ' ul').appendChild(newTask);
+				if (project == null || project == "")
+				{
+					document.querySelector('#' + priority + ' ul').appendChild(newTask);
+				}
+				else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				{
+					document.querySelector('.' + project).appendChild(newTask);
+				}
 				
 				// Clear input box
 				document.getElementById('newtask').value = "";
 				document.getElementById('duedate').value = "";
 			}
+			
+			/*
+			function addProject(description, priority)
+			{
+				// Reserve local variables
+				var newProject, newOption, checkBox;
+				
+				// Create new list element
+				newProject = document.createElement('li');
+				
+				newProject.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
+				
+				// Append new item to list
+				document.querySelector('#' + projectpriority + ' ul').appendChild(newProject);
+				
+				// Clear input box
+				document.getElementById('newproject').value = "";
+			}*/
 			
 			function crossOut(item)
 			{
@@ -176,7 +201,7 @@
 			</ul>
 		</section>
 		
-		<section id="options">
+		<section class="options" id="task">
 			Task: <input id="newtask" type="text">
 			Due: <input id="duedate" style="width:100px" type="text">
 			<br>
@@ -187,6 +212,19 @@
 			</select>
 			<button onclick="addTask(document.getElementById('newtask').value, document.getElementById('priority').value, document.getElementById('duedate').value);">Add Task</button>
 		</section>
+		
+		<!--
+		<section class="options" id="project">
+			Project: <input id="newproject" type="text">
+			<br>
+			<select id="projectpriority">
+				<option value="high">High</option>
+				<option value="medium">Medium</option>
+				<option value="low">Low</option>
+			</select>
+			<button onclick="addProject(document.getElementById('newproject').value, document.getElementById('projectpriority').value);">Add Project</button>
+		</section>
+		-->
 		
 		<!--
 		<footer>
