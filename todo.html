@@ -22,6 +22,10 @@
 				padding: 10px;
 			}
 			
+			button.option {
+				margin-bottom: 20px;
+			}
+			
 			#list ul {
 				list-style: none;
 				margin-left: -20px;
@@ -89,15 +93,15 @@
 				<option value="medium">Medium</option>
 				<option value="low">Low</option>
 			</select><br><br>
-			<button onclick="toDoList.addTask();">Add Task</button><br><br>
+			<button class="option" onclick="toDoList.addTask();">Add Task</button>
 		</section>
 		
 		<section class="options" id="extras">
 			<h1>Additional Options</h1>
-			<button onclick="toDoList.saveAll(); toDoList.restoreAll();">Remove Completed Tasks</button>
-			<button onclick="toDoList.saveAll();">Save Completed Tasks</button>
-			<button onclick="toDoList.restoreAll();">Restore Saved Tasks</button>
-			<br><br>
+			<button class="option" onclick="toDoList.saveAll(); toDoList.restoreAll();">Remove Completed Tasks</button>
+			<button class="option" onclick="toDoList.saveAll();">Save Completed Tasks</button>
+			<button class="option" onclick="toDoList.restoreAll();">Restore Saved Tasks</button>
+			
 		</section>
 		
 		<footer>
