@@ -4,6 +4,8 @@ function Task(name, priority, due, project)
 	this.priority = priority;
 	this.due = due;
 	this.project = project;
+	
+	this.idNum = 0;
 }
 
 
@@ -17,6 +19,7 @@ function Project(name)
 function TaskList()
 {
 	var projects = [];
+	var idCount = 0;
 
 	var displayList = function()
 	{
@@ -35,7 +38,7 @@ function TaskList()
 			// Create project element and add it to display
 			projItem = document.createElement('li');
 			projItem.className = "project";
-			projItem.innerHTML = '<input type="checkbox" onclick="toDoList.crossOut(this)"><button onclick="toDoList.toggleChildren(this)">Toggle Tasks</button>' + " " + projects[i].name;
+			projItem.innerHTML = '<button onclick="toDoList.toggleChildren(this)">Toggle Tasks</button>' + " " + projects[i].name;
 			document.querySelector('#list ul').appendChild(projItem);
 			
 			// Create task elements and add them to display
@@ -54,6 +57,9 @@ function TaskList()
 				// Create task element and add it to display
 				taskItem = document.createElement('li');
 				taskItem.className = projects[i].tasks[j].priority;
+				taskItem.id = idCount;
+				projects[i].tasks[j].idNum = idCount;
+				idCount += 1;
 				taskItem.innerHTML = '<input type="checkbox" onclick="toDoList.crossOut(this);">' + priority + due + projects[i].tasks[j].name;
 				projItem.appendChild(taskItem);
 			}
@@ -62,7 +68,7 @@ function TaskList()
 	
 	var clearFields = function()
 	{
-		// Clear all fields
+		// Reset all fields to default
 		document.getElementById('newtask').value = "";
 		document.getElementById('duedate').value = "";
 		document.getElementById('project').value = "Miscellaneous";
@@ -70,20 +76,24 @@ function TaskList()
 	
 	var validate = function(id)
 	{
+		// Returns true if the input field is not empty
 		if (document.getElementById(id).value != "")
 		{
 			return true;
 		}
 		
+		// Otherwise returns false
 		return false;
 	}
 
 	this.crossOut = function(item)
 	{
+		// Cross out item if checked
 		if (item.checked)
 		{
 			item.parentNode.style.textDecoration = "line-through";
 		}
+		// Remove strikethrough if not checked
 		else
 		{
 			item.parentNode.style.textDecoration = "none";
@@ -95,7 +105,7 @@ function TaskList()
 		// Get children
 		var children = item.parentNode.childNodes;
 	
-		// Iterate through children array and toggle them off.
+		// Iterate through children array and toggle elements on and off.
 		for(i = 0; i < children.length; i++)
 		{
 			if (children[i].className == "high" || children[i].className == "medium" || children[i].className == "low")
@@ -171,24 +181,66 @@ function TaskList()
 		}
 	}
 
+	this.removeCheckedTasks = function()
+	{
+		// Save all unchecked tasks
+		this.saveAll();
+		
+		// Restore tasks
+		this.restoreAll();
+	}
+		
 	this.saveAll = function()
 	{
+		// Create list to hold all inputs
+		var checkboxes = document.getElementsByTagName('input');
+		
+		// Create a list to hold all unchecked checkboxes
+		var unchecked = [];
+		
+		// Create a list to hold all tasks
 		var tempList = [];
 		
-		for (i = 0; i < projects.length; i++)
+		// Iterate through checkboxes
+		for (i = 0; i < checkboxes.length; i++)
 		{
-			for (j = 0; j < projects[i].tasks.length; j++)
+			if (checkboxes[i].type == "checkbox" && !checkboxes[i].checked)
 			{
-				tempList.push(projects[i].tasks[j]);
+				// Push to unchecked if unchecked
+				unchecked.push(checkboxes[i].parentNode);
 			}
 		}
 		
+		// Iterate through checked list elements
+		for (i = 0; i < unchecked.length; i++)
+		{
+			// Iterate through projects
+			for (j = 0; j < projects.length; j++)
+			{
+				// Iterate through tasks
+				for (k = 0; k < projects[j].tasks.length; k++)
+				{
+					// If task is unchecked . . .
+					if (projects[j].tasks[k].idNum == unchecked[i].id)
+					{
+						// . . . Push the task to the list to be saved
+						tempList.push(projects[j].tasks[k]);
+					}
+				}
+			}
+		}
+		
+		// Store data as JSON in local storage
 		localStorage.setItem("tdlist", JSON.stringify(tempList));
 	}
 	
 	this.restoreAll = function()
 	{
+		// Parse saved data and store in list
 		var list = JSON.parse(localStorage.getItem("tdlist"));
+		
+		// Empty the projects list
+		projects = [];
 		
 		// Add items back into project list
 		for (i = 0; i < list.length; i++)
@@ -197,6 +249,7 @@ function TaskList()
 			var found = false;
 			for (j = 0; j < projects.length; j++)
 			{
+				// If it does, push task to project
 				if (projects[j].name == list[i].project)
 				{
 					projects[j].tasks.push(list[i]);

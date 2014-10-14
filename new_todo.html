@@ -64,6 +64,8 @@
 			toDoList = new TaskList();
 			
 			window.onload = toDoList.restoreAll;
+			
+			window.onunload = toDoList.saveAll;
 		
 		</script>
 		
@@ -88,6 +90,14 @@
 				<option value="low">Low</option>
 			</select><br><br>
 			<button onclick="toDoList.addTask();">Add Task</button><br><br>
+		</section>
+		
+		<section class="options" id="extras">
+			<h1>Additional Options</h1>
+			<button onclick="toDoList.saveAll(); toDoList.restoreAll();">Remove Completed Tasks</button>
+			<button onclick="toDoList.saveAll();">Save Completed Tasks</button>
+			<button onclick="toDoList.restoreAll();">Restore Saved Tasks</button>
+			<br><br>
 		</section>
 		
 		<footer>
