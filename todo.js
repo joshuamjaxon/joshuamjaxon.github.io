@@ -173,11 +173,48 @@ function TaskList()
 
 	this.saveAll = function()
 	{
-	
+		var tempList = [];
+		
+		for (i = 0; i < projects.length; i++)
+		{
+			for (j = 0; j < projects[i].tasks.length; j++)
+			{
+				tempList.push(projects[i].tasks[j]);
+			}
+		}
+		
+		localStorage.setItem("tdlist", JSON.stringify(tempList));
 	}
 	
 	this.restoreAll = function()
 	{
+		var list = JSON.parse(localStorage.getItem("tdlist"));
 		
+		// Add items back into project list
+		for (i = 0; i < list.length; i++)
+		{
+			// Check to see if project exists
+			var found = false;
+			for (j = 0; j < projects.length; j++)
+			{
+				if (projects[j].name == list[i].project)
+				{
+					projects[j].tasks.push(list[i]);
+					found = true;
+				}
+			}
+			
+			// If project does not exist, create it
+			if (!found)
+			{
+				projects.push(new Project(list[i].project));
+				
+				// And push the new element to the project
+				projects[projects.length - 1].tasks.push(list[i]);
+			}
+		}
+		
+		// Update the display
+		displayList();
 	}
 }
