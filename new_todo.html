@@ -22,14 +22,30 @@
 				padding: 10px;
 			}
 			
-			.list ul {
+			#list ul {
 				list-style: none;
 				margin-left: -20px;
 			}
 			
-			.list input {
+			#list input {
 				margin: 5px;
 				margin-right: 10px;
+			}
+			
+			.project li {
+				margin-left: 25px;
+			}
+			
+			.high {
+				color: red;
+			}
+			
+			.medium {
+				color: orange;
+			}
+			
+			.low {
+				color: gray;
 			}
 			
 			.options {
@@ -45,188 +61,32 @@
 		
 		<script type="text/javascript">
 		
-			window.onload = loadTasks;
-			window.onunload = saveTasks;
+			toDoList = new TaskList();
 		
-			function addTask(description, priority, due, project)
-			{
-				// Reserve local variables
-				var newTask, checkBox;
-				
-				// Create new list element
-				newTask = document.createElement('li');
-				
-				if (due == null || due =="")
-				{
-					newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
-				}
-				else
-				{
-					newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + "[" + due + "] " + description;
-				}
-				
-				// Append new item to list
-				if (project == null || project == "")
-				{
-					document.querySelector('#' + priority + ' ul').appendChild(newTask);
-				}
-				else //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-				{
-					document.querySelector('.' + project).appendChild(newTask);
-				}
-				
-				// Clear input box
-				document.getElementById('newtask').value = "";
-				document.getElementById('duedate').value = "";
-			}
-			
-			/*
-			function addProject(description, priority)
-			{
-				// Reserve local variables
-				var newProject, newOption, checkBox;
-				
-				// Create new list element
-				newProject = document.createElement('li');
-				
-				newProject.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
-				
-				// Append new item to list
-				document.querySelector('#' + projectpriority + ' ul').appendChild(newProject);
-				
-				// Clear input box
-				document.getElementById('newproject').value = "";
-			}*/
-			
-			function crossOut(item)
-			{
-				if (item.checked)
-				{
-					item.parentNode.style.textDecoration = "line-through";
-					item.parentNode.className = "done";
-				}
-				else
-				{
-					item.parentNode.style.textDecoration = "none";
-					item.parentNode.className = "";
-				}
-			}
-			
-			function saveTasks()
-			{
-				// Reserve variables
-				var tasks, data;
-			
-				// Assign HIGH
-				data = []
-				tasks = document.querySelectorAll('#high li');
-				for (i = 0; i < tasks.length; i++)
-				{
-					if (tasks[i].className != "done")
-					{
-						data.push(tasks[i].innerText);
-					}
-				}
-				localStorage.setItem("todoDatabaseHigh", JSON.stringify(data));
-				
-				// Assign MEDIUM
-				data = []
-				tasks = document.querySelectorAll('#medium li');
-				for (i = 0; i < tasks.length; i++)
-				{
-					if (tasks[i].className != "done")
-					{
-						data.push(tasks[i].innerText);
-					}
-				}
-				localStorage.setItem("todoDatabaseMedium", JSON.stringify(data));
-				
-				// Assign LOW
-				data = []
-				tasks = document.querySelectorAll('#low li');
-				for (i = 0; i < tasks.length; i++)
-				{
-					if (tasks[i].className != "done")
-					{
-						data.push(tasks[i].innerText);
-					}
-				}
-				localStorage.setItem("todoDatabaseLow", JSON.stringify(data));
-			}
-			
-			function loadTasks()
-			{
-				var HIGH = 0, MEDIUM = 1, LOW = 2;
-				var data = [];
-				var priority;
-				
-				data[HIGH] = JSON.parse(localStorage.getItem("todoDatabaseHigh"));
-				for (i = 0; i < data[HIGH].length; i++)
-				{
-					addTask(data[HIGH][i], "high");
-				}
-				
-				data[MEDIUM] = JSON.parse(localStorage.getItem("todoDatabaseMedium"));
-				for (i = 0; i < data[MEDIUM].length; i++)
-				{
-					addTask(data[MEDIUM][i], "medium");
-				}
-				
-				data[LOW] = JSON.parse(localStorage.getItem("todoDatabaseLow"));
-				for (i = 0; i < data[LOW].length; i++)
-				{
-					addTask(data[LOW][i], "low");
-				}
-			}
-			
-		</script>	
+		</script>
 		
 		<header>
 			<h1>To-Do List</h1>
 		</header>
 		
-		<section class="list" id="high">
-			<h1>High Priority</h1>
-			<ul>
-			</ul>
-		</section>
-		
-		<section class="list" id="medium">
-			<h1>Medium Priority</h1>
-			<ul>
-			</ul>
-		</section>
-		
-		<section class="list" id="low">
-			<h1>Low Priority</h1>
+		<section id="list">
 			<ul>
 			</ul>
 		</section>
 		
 		<section class="options" id="task">
-			Task: <input id="newtask" type="text">
-			Due: <input id="duedate" style="width:100px" type="text">
-			<br>
+			<h1>Add a New Task</h1>
+			Task: <input id="newtask" type="text"><br><br>
+			Project: <input id="project" type="text" value="Miscellaneous"><br><br>
+			Due: <input id="duedate" type="date"><br><br>
+			Priority: 
 			<select id="priority">
 				<option value="high">High</option>
 				<option value="medium">Medium</option>
 				<option value="low">Low</option>
-			</select>
-			<button onclick="addTask(document.getElementById('newtask').value, document.getElementById('priority').value, document.getElementById('duedate').value);">Add Task</button>
+			</select><br><br>
+			<button onclick="toDoList.addTask();">Add Task</button><br><br>
 		</section>
-		
-		<!--
-		<section class="options" id="project">
-			Project: <input id="newproject" type="text">
-			<br>
-			<select id="projectpriority">
-				<option value="high">High</option>
-				<option value="medium">Medium</option>
-				<option value="low">Low</option>
-			</select>
-			<button onclick="addProject(document.getElementById('newproject').value, document.getElementById('projectpriority').value);">Add Project</button>
-		</section>
-		-->
 		
 		<!--
 		<footer>
