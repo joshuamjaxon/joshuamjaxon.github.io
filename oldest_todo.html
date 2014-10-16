@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+	
+		<title>To-Do List Application</title>
+		<link rel="stylesheet" href="style.css" type="text/css" />
+		<style>
+			header {
+				text-align: center;
+			}
+			
+			section {
+				width: 50%;
+				min-width: 800px;
+				margin-top: 25px;
+				margin-bottom: 25px;
+				margin-left: auto;
+				margin-right: auto;
+				border: 4px solid;
+				padding: 10px;
+			}
+			
+			.list ul {
+				list-style: none;
+				margin-left: -20px;
+			}
+			
+			.list input {
+				margin: 5px;
+				margin-right: 10px;
+			}
+			
+			#options {
+				text-align: center;
+			}
+		</style>
+		
+	</head>
+	
+	<body>
+		
+		<script type="text/javascript">
+		
+			window.onload = loadTasks;
+			window.onunload = saveTasks;
+		
+			function addTask(description, priority)
+			{
+				// Reserve local variables
+				var newTask, checkBox;
+				
+				// Create new list element
+				newTask = document.createElement('li');
+				//newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + document.getElementById('newtask').value;
+				newTask.innerHTML = '<input type="checkbox" onclick="crossOut(this);">' + description;
+				
+				// Append new item to list
+				document.querySelector('#high ul').appendChild(newTask);
+				
+				// Clear input box
+				document.getElementById('newtask').value = "";
+			}
+			
+			function crossOut(item)
+			{
+				if (item.checked)
+				{
+					item.parentNode.style.textDecoration = "line-through";
+					item.parentNode.className = "done";
+				}
+				else
+				{
+					item.parentNode.style.textDecoration = "none";
+					item.parentNode.className = "";
+				}
+			}
+			
+			function saveTasks()
+			{
+				var tasks, data;
+			
+				tasks = document.querySelectorAll('li');
+				data = [];
+				
+				for (i = 0; i < tasks.length; i++)
+				{
+					if (tasks[i].className != "done")
+					{
+						data.push(tasks[i].innerText);
+					}
+				}
+
+				localStorage.setItem("todoDatabase", JSON.stringify(data));
+			}
+			
+			function loadTasks()
+			{
+				var data;
+				
+				data = JSON.parse(localStorage.getItem("todoDatabase"));
+				
+				for (i = 0; i < data.length; i++)
+				{
+					addTask(data[i], 'high');
+				}
+			}
+			
+		</script>	
+		
+		<header>
+			<h1>To-Do List</h1>
+		</header>
+		
+		<section class="list" id="high">
+			<h1>High Priority</h1>
+			<ul>
+			</ul>
+		</section>
+		
+		<section class="list" id="medium">
+			<h1>Medium Priority</h1>
+			<ul>
+			</ul>
+		</section>
+		
+		<section class="list" id="low">
+			<h1>Low Priority</h1>
+			<ul>
+			</ul>
+		</section>
+		
+		<section id="options">
+			<input id="newtask" type="text"><br>
+			<select>
+				<option value="high">High</option>
+				<option value="medium">Medium</option>
+				<option value="low">Low</option>
+			</select>
+			<button onclick="addTask(document.getElementById('newtask').value, 'high');">Add Task</button>
+		</section>
+		
+		<!--
+		<footer>
+			<p>&copy; Copyright 2014, Joshua Jackson.</p>
+		</footer>
+		-->
+			
+	</body>
+
+</html>

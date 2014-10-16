@@ -61,7 +61,7 @@
 	
 	<body>
 		
-		<script src="todo.js" type="text/javascript"></script>
+		<script src="new_todo.js" type="text/javascript"></script>
 		
 		<script type="text/javascript">
 		
@@ -93,12 +93,12 @@
 				<option value="medium">Medium</option>
 				<option value="low">Low</option>
 			</select><br><br>
-			<button class="option" onclick="toDoList.addTask();">Add Task</button>
+			<button class="option" onclick="toDoList.addTask(document.getElementById('newtask').value, document.getElementById('duedate').value, document.getElementById('priority').value, document.getElementById('project').value);">Add Task</button>
 		</section>
 		
 		<section class="options" id="extras">
 			<h1>Additional Options</h1>
-			<button class="option" onclick="toDoList.saveAll(); toDoList.restoreAll();">Remove Completed Tasks</button>
+			<button class="option" onclick="toDoList.removeCheckedTasks();">Remove Completed Tasks</button>
 			<button class="option" onclick="toDoList.saveAll();">Save Completed Tasks</button>
 			<button class="option" onclick="toDoList.restoreAll();">Restore Saved Tasks</button>
 			

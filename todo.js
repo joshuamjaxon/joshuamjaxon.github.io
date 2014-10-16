@@ -9,59 +9,71 @@ function Task(name, priority, due, project)
 }
 
 
-function Project(name)
-{
-	this.name = name;
-	this.tasks = [];
-}
-
-
 function TaskList()
 {
-	var projects = [];
+	var list = [];
 	var idCount = 0;
 
 	var displayList = function()
 	{
-		// Create variables to represent new list items
-		var projItem;
+		// Create task variables
+		var item, due, priority;
 		
-		// Create new task variables
-		var taskItem, due, priority;
+		// Create project variables
+		var projects = [], found;
+		var projItem, projSpan;
 		
 		// Clear previous list
 		document.querySelector('#list ul').innerHTML = "";
-	
-		// Add list item to appropriate place in display
-		for (i = 0; i < projects.length; i++)
+		
+		// Iterate through task list
+		for (i = 0; i < list.length; i++)
 		{
-			// Create project element and add it to display
-			projItem = document.createElement('li');
-			projItem.className = "project";
-			projItem.innerHTML = '<button onclick="toDoList.toggleChildren(this)">Toggle Tasks</button>' + " " + projects[i].name;
-			document.querySelector('#list ul').appendChild(projItem);
+			// Format due date
+			if (list[i].due == "") {
+				due = "";
+			} else {
+				due = "[Due: " + list[i].due + "] ";
+			}
 			
-			// Create task elements and add them to display
-			for (j = 0; j < projects[i].tasks.length; j++)
+			// Format priority
+			priority = "[" + list[i].priority.toUpperCase() + "] ";
+		
+			// Create task list element
+			item = document.createElement('li');
+			item.className = list[i].priority;
+			item.id = list[i].idNum;
+			item.innerHTML = '<input type="checkbox" onclick="toDoList.crossOut(this);">' + priority + due + list[i].name;
+		
+			// Display element under the appropriate project
+			found = false;		// Assume not found
+			for (j = 0; j < projects.length; j++)
 			{
-				// Format due date
-				if (projects[i].tasks[j].due == "") {
-					due = "";
-				} else {
-					due = "[Due: " + projects[i].tasks[j].due + "] ";
+				// Append item to existing project
+				if (list[i].project == projects[j].firstChild.innerText)
+				{
+					projects[j].appendChild(item);
+					found = true;
+					break;
 				}
+			}
+			
+			// If project was not found, create it
+			if (!found)
+			{
+				// Create project element
+				projItem = document.createElement('li');
+				projItem.className = "project";
+				projItem.innerHTML = '<span onclick="toDoList.toggleChildren(this)">' + list[i].project + '</span>';
 				
-				// Format priority
- 				priority = "[" + projects[i].tasks[j].priority.toUpperCase() + "] ";
+				// Push project element to project list
+				projects.push(projItem);
 				
-				// Create task element and add it to display
-				taskItem = document.createElement('li');
-				taskItem.className = projects[i].tasks[j].priority;
-				taskItem.id = idCount;
-				projects[i].tasks[j].idNum = idCount;
-				idCount += 1;
-				taskItem.innerHTML = '<input type="checkbox" onclick="toDoList.crossOut(this);">' + priority + due + projects[i].tasks[j].name;
-				projItem.appendChild(taskItem);
+				// Append item to new project
+				projItem.appendChild(item);
+				
+				// Append project to list
+				document.querySelector('#list ul').appendChild(projItem);
 			}
 		}
 	}
@@ -72,18 +84,6 @@ function TaskList()
 		document.getElementById('newtask').value = "";
 		document.getElementById('duedate').value = "";
 		document.getElementById('project').value = "Miscellaneous";
-	}
-	
-	var validate = function(id)
-	{
-		// Returns true if the input field is not empty
-		if (document.getElementById(id).value != "")
-		{
-			return true;
-		}
-		
-		// Otherwise returns false
-		return false;
 	}
 
 	this.crossOut = function(item)
@@ -122,51 +122,38 @@ function TaskList()
 		}
 	}
 	
-	this.addTask = function()
+	this.addTask = function(name, dueDate, priority, project)
 	{
 		// Create flag for project name
 		var found;
 	
 		// Make sure name block is filled
-		if (validate('newtask'))
+		if (document.getElementById('newtask').value != "")
 		{		
 			// Create new task
 			var newTask = new Task();
 		
 			// Assign values to new task
-			newTask.name = document.getElementById('newtask').value;
-			newTask.priority = document.getElementById('priority').value;
-			newTask.due = document.getElementById('duedate').value;
+			newTask.name = name;
+			newTask.priority = priority;
+			newTask.due = dueDate;
 			
 			// Default value of project is Misc.
-			if (document.getElementById('project').value != "")
+			if (project != "")
 			{
-				newTask.project = document.getElementById('project').value;
+				newTask.project = project;
 			}
 			else
 			{
 				newTask.project = "Miscellaneous";
 			}
-		
-			// Check to see if project exists
-			found = false;
-			for (i = 0; i < projects.length; i++)
-			{
-				if (projects[i].name == newTask.project)
-				{
-					projects[i].tasks.push(newTask);
-					found = true;
-				}
-			}
 			
-			// If project does not exist, create it
-			if (!found)
-			{
-				projects.push(new Project(newTask.project));
-				
-				// And push the new element to the project
-				projects[projects.length - 1].tasks.push(newTask);
-			}
+			// Give task an id number
+			newTask.idNum = idCount;
+			idCount += 1;
+			
+			// Add task to list
+			list.push(newTask);
 		
 			// Clear all inputs
 			clearFields();
@@ -183,23 +170,56 @@ function TaskList()
 
 	this.removeCheckedTasks = function()
 	{
-		// Save all unchecked tasks
-		this.saveAll();
+		// Get list of all inputs
+		var inputs = document.getElementsByTagName('input');
 		
-		// Restore tasks
-		this.restoreAll();
+		// Create a list to store all checked IDs
+		var checked = []
+		
+		// Iterate through list of inputs
+		for (i = 0; i < inputs.length; i++)
+		{
+			console.log(inputs[i]);
+		
+			// If checkbox is checked, push its parents ID to a list
+			if (inputs[i].checked)
+			{
+				checked.push(inputs[i].parentNode.id);
+			}
+		}
+
+		// Iterate through list of ids
+		for (i = 0; i < checked.length; i++)
+		{
+			// Iterate through list of tasks
+			for (j = 0; j < list.length; j++)
+			{
+				// If ID of list element matches checked id
+				if (list[j].idNum == checked[i])
+				{
+					// Splice checked task from list
+					list.splice(j, 1);
+					
+					// Break from inner loop because IDs are unique
+					break;
+				}
+			}
+		}
+		
+		// Refresh the display
+		displayList();
 	}
-		
+
 	this.saveAll = function()
 	{
 		// Create list to hold all inputs
 		var checkboxes = document.getElementsByTagName('input');
 		
-		// Create a list to hold all unchecked checkboxes
+		// Create a list to hold all unchecked ids
 		var unchecked = [];
 		
 		// Create a list to hold all tasks
-		var tempList = [];
+		var saveList = [];
 		
 		// Iterate through checkboxes
 		for (i = 0; i < checkboxes.length; i++)
@@ -207,7 +227,7 @@ function TaskList()
 			if (checkboxes[i].type == "checkbox" && !checkboxes[i].checked)
 			{
 				// Push to unchecked if unchecked
-				unchecked.push(checkboxes[i].parentNode);
+				unchecked.push(checkboxes[i].parentNode.id);
 			}
 		}
 		
@@ -215,56 +235,40 @@ function TaskList()
 		for (i = 0; i < unchecked.length; i++)
 		{
 			// Iterate through projects
-			for (j = 0; j < projects.length; j++)
+			for (j = 0; j < list.length; j++)
 			{
-				// Iterate through tasks
-				for (k = 0; k < projects[j].tasks.length; k++)
+				// If task is unchecked . . .
+				if (list[j].idNum == unchecked[i])
 				{
-					// If task is unchecked . . .
-					if (projects[j].tasks[k].idNum == unchecked[i].id)
-					{
-						// . . . Push the task to the list to be saved
-						tempList.push(projects[j].tasks[k]);
-					}
+					// . . . Push the task to the list to be saved
+					saveList.push(list[j]);
+					
+					// . . . And break from inner loop because each task has a unique id
+					break;
 				}
 			}
 		}
-		
+
 		// Store data as JSON in local storage
-		localStorage.setItem("tdlist", JSON.stringify(tempList));
+		localStorage.setItem("tdlist", JSON.stringify(saveList));
 	}
 	
 	this.restoreAll = function()
 	{
-		// Parse saved data and store in list
-		var list = JSON.parse(localStorage.getItem("tdlist"));
+		// Parse saved data and store back in list
+		list = JSON.parse(localStorage.getItem("tdlist"));
 		
-		// Empty the projects list
-		projects = [];
+		// Reset ID count
+		idCount = 0;
 		
-		// Add items back into project list
+		// Iterate through list
 		for (i = 0; i < list.length; i++)
 		{
-			// Check to see if project exists
-			var found = false;
-			for (j = 0; j < projects.length; j++)
-			{
-				// If it does, push task to project
-				if (projects[j].name == list[i].project)
-				{
-					projects[j].tasks.push(list[i]);
-					found = true;
-				}
-			}
+			// Give each task a new ID
+			list[i].idNum = idCount;
 			
-			// If project does not exist, create it
-			if (!found)
-			{
-				projects.push(new Project(list[i].project));
-				
-				// And push the new element to the project
-				projects[projects.length - 1].tasks.push(list[i]);
-			}
+			// Increment ID counter
+			idCount += 1;
 		}
 		
 		// Update the display
