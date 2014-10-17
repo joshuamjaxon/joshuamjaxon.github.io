@@ -84,7 +84,6 @@ function TaskList()
 		// Reset all fields to default
 		document.getElementById('newtask').value = "";
 		document.getElementById('duedate').value = "";
-		document.getElementById('project').value = "Miscellaneous";
 	}
 
 	this.crossOut = function(item)
