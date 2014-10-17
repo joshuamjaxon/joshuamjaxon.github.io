@@ -50,7 +50,7 @@ function TaskList()
 			for (j = 0; j < projects.length; j++)
 			{
 				// Append item to existing project
-				if (list[i].project == projects[j].firstChild.innerText)
+				if (list[i].project == projects[j].childNodes[2].innerText)		// Check third child. This skips the button and the extra space.
 				{
 					projects[j].appendChild(item);
 					found = true;
@@ -63,8 +63,8 @@ function TaskList()
 			{
 				// Create project element
 				projItem = document.createElement('li');
-				projItem.className = "project";
-				projItem.innerHTML = '<span onclick="toDoList.toggleChildren(this)">' + list[i].project + '</span>';
+				projItem.className = "project";																 // v-- Must be a space here
+				projItem.innerHTML = '<button onclick="toDoList.toggleChildren(this)">Hide all tasks in</button> <span>' + list[i].project + '</span>';
 				
 				// Push project element to project list
 				projects.push(projItem);
@@ -75,6 +75,7 @@ function TaskList()
 				// Append project to list
 				document.querySelector('#list ul').appendChild(projItem);
 			}
+			
 		}
 	}
 	
@@ -108,6 +109,7 @@ function TaskList()
 		// Iterate through children array and toggle elements on and off.
 		for(i = 0; i < children.length; i++)
 		{
+			// If the child is a task, which is indicated by a priority class
 			if (children[i].className == "high" || children[i].className == "medium" || children[i].className == "low")
 			{
 				if (children[i].style.display == "none")
@@ -119,6 +121,16 @@ function TaskList()
 					children[i].style.display = "none";
 				}
 			}
+		}
+		
+		// Also change the button text based on context
+		if (item.innerText == "Hide all tasks in")
+		{
+			item.innerText = "Show all tasks in";
+		}
+		else
+		{
+			item.innerText = "Hide all tasks in";
 		}
 	}
 	
@@ -179,8 +191,6 @@ function TaskList()
 		// Iterate through list of inputs
 		for (i = 0; i < inputs.length; i++)
 		{
-			console.log(inputs[i]);
-		
 			// If checkbox is checked, push its parents ID to a list
 			if (inputs[i].checked)
 			{
