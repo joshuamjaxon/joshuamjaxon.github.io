@@ -3,13 +3,13 @@
 #
 
 # Name of your site (displayed in the header)
-name: Joshua Jackson
+name: Joshua M. Jackson
 
 # Name of the author
 author: Joshua Jackson
 
 # Short bio or description (displayed in the header)
-description: An elegant Jekyll theme
+description: Published experimental particle physics researcher emphasizing quantitative analysis results grounded in real-world interpretation.
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/reverie.png
@@ -26,7 +26,7 @@ footer-links:
   flickr:
   github: joshuamjaxon
   instagram:
-  linkedin: in/joshua-matthew-jackson
+  linkedin: joshua-matthew-jackson
   pinterest:
   rss: # rss
   twitter: # amit_merchant
@@ -41,7 +41,7 @@ footer-links:
 disqus: 
 
 # Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-google_analytics: UA-43339302-11
+#google_analytics: UA-43339302-11
 
 # For newer "GA4" analytics, use the following instead of the "UA" entry above
 #google_analytics_ga4: G-GABC1DEFG
