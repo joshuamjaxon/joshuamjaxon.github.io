@@ -3,10 +3,10 @@
 #
 
 # Name of your site (displayed in the header)
-name: Reverie
+name: Joshua Jackson
 
 # Name of the author
-author: Amit Merchant
+author: Joshua Jackson
 
 # Short bio or description (displayed in the header)
 description: An elegant Jekyll theme
@@ -21,15 +21,15 @@ avatar: /images/reverie.png
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email: amit.d.merchant@gmail.com
+  email: jacksonjoshuamatthew@gmail.com
   facebook:
   flickr:
-  github: amitmerchant1990/reverie
+  github: joshuamjaxon
   instagram:
-  linkedin: 
+  linkedin: in/joshua-matthew-jackson
   pinterest:
-  rss: rss
-  twitter: amit_merchant
+  rss: # rss
+  twitter: # amit_merchant
   stackoverflow: 
   youtube: # channel/<your_long_string> or user/<user-name>
   googleplus: # anything in your profile username that comes after plus.google.com/
@@ -48,8 +48,8 @@ google_analytics: UA-43339302-11
 
 # Your website URL (e.g. http://amitmerchant1990.github.io or http://www.amitmerchant.com)
 # Used for Sitemap.xml and your RSS feed
-url: http://www.amitmerchant.com/reverie
-enforce_ssl: https://www.amitmerchant.com/reverie
+url: http://joshuamjaxon.github.io
+enforce_ssl: https://joshuamjaxon.github.io
 
 # If you're hosting your site at a Project repository on GitHub pages
 # (http://yourusername.github.io/repository-name)
