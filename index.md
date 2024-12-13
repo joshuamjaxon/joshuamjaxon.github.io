@@ -1,6 +1,6 @@
 ---
-layout: titlelesspage
-title: Home
+layout: page
+title: About Me
 permalink: /
 ---
 
