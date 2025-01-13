@@ -17,7 +17,7 @@ Below, find links to some of the work I've done. For additional details, please 
 For a full list of publications, see [Inspire](https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=cn%20besiii%20and%20a%20jackson).
 
 ## Talks
-- J. Jackson, "Search for <span>$\chi_{c1}(3872)\to\pi^0\pi^0\chi_{c1,2}$</span> and Amplitude Analysis Techniques," *Thesis Defense*, Bloomington,
+- J. Jackson, "Search for <div>$\chi_{c1}(3872)\to\pi^0\pi^0\chi_{c1,2}$</div> and Amplitude Analysis Techniques," *Thesis Defense*, Bloomington,
 Indiana (October 2023).
 - J. Jackson, "Developing a Partial Wave Analysis," *Homer A. Neal Seminar*, Bloomington,
 Indiana (October 2023).
